@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ollama-hologram-chatbot
+  name: aifriends-hologram-chatbot
   namespace: demos-main
 spec:
   selector:
-    app: ollama-hologram-chatbot
+    app: aifriends-hologram-chatbot
   ports:
   - name: didcomm
     port: 3001

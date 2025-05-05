@@ -1,76 +1,72 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-   name: ollama-hologram-chatbot
+   name: aifriends-hologram-chatbot
    namespace: demos-main
    labels:
       app: nginx
 spec:
-   serviceName: "ollama-hologram-chatbot"
+   serviceName: "aifriends-hologram-chatbot"
    replicas: 1
    selector:
       matchLabels:
-         app: ollama-hologram-chatbot
+         app: aifriends-hologram-chatbot
    template:
       metadata:
          labels:
-            app: ollama-hologram-chatbot
+            app: aifriends-hologram-chatbot
       spec:
          containers:
-         -  name: ollama-hologram-chatbot-sa-container
+         -  name: aifriends-hologram-chatbot-sa-container
             image: io2060/2060-service-agent:main
             imagePullPolicy: Always
             env:
             - name: AGENT_ENDPOINT
-              value: "wss://ollama.demos.2060.io:443"
+              value: "wss://aifriends.demos.2060.io:443"
             - name: AGENT_NAME
-              value: "Ollama AI"
+              value: "aifriends AI"
             - name: AGENT_INVITATION_IMAGE_URL
-              value: "https://q.ollama.demos.2060.io/avatar.png"
+              value: "https://q.aifriends.demos.2060.io/avatar.png"
             - name: EVENTS_BASE_URL
               value: "http://localhost:2903"
             - name: AGENT_PUBLIC_DID
-              value: "did:web:ollama.demos.2060.io"
+              value: "did:web:aifriends.demos.2060.io"
             - name: ANONCREDS_SERVICE_BASE_URL
-              value: "https://ollama.demos.2060.io"
+              value: "https://aifriends.demos.2060.io"
             - name: ADMIN_PORT
               value: "4000"
             volumeMounts:
-            - name: ollama-hologram-chatbot-sa-pv-main
+            - name: aifriends-hologram-chatbot-sa-pv-main
               mountPath: /root/.afj
             ports:
             -  containerPort: 4000
             -  containerPort: 3001
-         -  name: ollama-hologram-chatbot-backend-container
-            image: io2060/ollama-hologram-chatbot:main
+         -  name: aifriends-hologram-chatbot-backend-container
+            image: io2060/aifriends-hologram-chatbot:main
             imagePullPolicy: Always
             env:
             - name: SERVICE_AGENT_ADMIN_BASE_URL
               value: "http://localhost:4000"
             - name: PUBLIC_BASE_URL
-              value: "https://ollama.demos.2060.io"
+              value: "https://aifriends.demos.2060.io"
             - name: PNVS_SERVICE_AGENT_ADMIN_BASE_URL
-              value: "https://a.ollama.demos.2060.io"
+              value: "https://a.aifriends.demos.2060.io"
             - name: DEBUG
               value: "1"
             - name: QUARKUS_HTTP_PORT
               value: "2903"
             - name: QUARKUS_DATASOURCE_PASSWORD
-              value: "**************"
+              value: "*******"
             - name: QUARKUS_DATASOURCE_USERNAME
-              value: "ollama"
+              value: "aifriends"
             - name: IO_TWENTYSIXTY_DEMOS_AUTH_VISION_REDIRDOMAIN
-              value: "ollama.demos.2060.io"
+              value: "aifriends.demos.2060.io"
             - name: IO_TWENTYSIXTY_SA_RES_C_MESSAGERESOURCE_MP_REST_URL
               value: "http://localhost:4000"
             - name: IO_TWENTYSIXTY_SA_RES_C_CREDENTIALTYPERESOURCE_MP_REST_URL
               value: "http://localhost:4000"
-            - name: IO_VERANA_FAUCET_HOLOGRAM_CHATBOT_RES_C_MEDIARESOURCE_MP_REST_URL
-              value: "http://localhost:2904"
-            - name: IO_VERANA_FAUCET_HOLOGRAM_CHATBOT_RES_C_FAUCETRESOURCE_MP_REST_URL
-              value: "http://localhost:3000"
-            - name: QUARKUS_SWAGGER_UI_ALWAYS_INCLUDE
-              value: "1"
+            - name: IO_TWENTYSIXTY_DEMOS_AUTH_ENABLED
+              value: "true"
             - name: IO_TWENTYSIXTY_DEMOS_AUTH_LANGUAGE
               value: "en"
             - name: IO_TWENTYSIXTY_DEMOS_AUTH_CREDENTIAL_ISSUER
@@ -82,7 +78,7 @@ spec:
             - name: IO_TWENTYSIXTY_DEMOS_AUTH_ID_CREDENTIAL_DEF
               value: "did:web:avatar.demos.2060.io?service=anoncreds&relativeRef=/credDef/CfwLzNitet6352BenXKHj3FJpoNRvpTxcKcScFM8vH47"
             - name: IO_TWENTYSIXTY_DEMOS_AUTH_MESSAGES_WELCOME
-              value: "Welcome to Ollama. This service is for human only and denied to bots. You will have to prove you are not a bot by presenting an AvatarID."
+              value: "Welcome to AI Friends! This service is for human only and denied to bots. You will have to prove you are not a bot by presenting an AvatarID."
             - name: IO_TWENTYSIXTY_DEMOS_AUTH_REQUEST_CITIZENID
               value: "0"
             - name: IO_TWENTYSIXTY_DEMOS_AUTH_REQUEST_FIRSTNAME
@@ -96,30 +92,67 @@ spec:
             - name: IO_TWENTYSIXTY_DEMOS_AUTH_MESSAGES_NOCRED
               value: "If you do not have an AvatarID (required to authenticate yourself), get one by connecting to below service."
             - name: IO_TWENTYSIXTY_DEMOS_AUTH_MESSAGES_ROOT_MENU_TITLE
-              value: "Ollama AI - Models"
+              value: "AI Friends"
             - name: IO_TWENTYSIXTY_DEMOS_AUTH_MESSAGES_ROOT_MENU_OPTION1
               value: "Help"
             - name: IO_TWENTYSIXTY_DEMOS_AUTH_MESSAGES_ROOT_MENU_NO_CRED
               value: "Get your AvatarID"
             - name: IO_TWENTYSIXTY_DEMOS_AUTH_JMS_MO_QUEUE_NAME
-              value: "ollama-chatbot-mo"
+              value: "aifriends-chatbot-mo"
             - name: IO_TWENTYSIXTY_DEMOS_AUTH_JMS_MT_QUEUE_NAME
-              value: "ollama-chatbot-mt"
-            - name: IO_TWENTYSIXTY_DEMOS_AUTH_JMS_OLLAMA_QUEUE_NAME
-              value: "ollama-chatbot-ollama"
-            - name: IO_TWENTYSIXTY_OLLAMA_HOLOGRAM_CHATBOT_OLLAMASERVER_URL
-              value: "https://ai.uche.org/"
-            - name: IO_TWENTYSIXTY_OLLAMA_HOLOGRAM_CHATBOT_OLLAMASERVER_MAXHISTORYSIZE
-              value: "100"
-            - name: IO_TWENTYSIXTY_OLLAMA_HOLOGRAM_CHATBOT_OLLAMASERVER_TIMEOUTSECONDS
-              value: "180"
-            - name: IO_TWENTYSIXTY_OLLAMA_HOLOGRAM_CHATBOT_OLLAMASERVER_MODELS
-              value: "llama3.2:3b,gemma2:9b,qwen2.5:7b,phi3.5"
-            # llama3.2:3b,llama3.1:8b,gemma2:9b,gemma2:27b,qwen2.5:7b,phi3.5
+              value: "aifriends-chatbot-mt"
+            - name: IO_TWENTYSIXTY_DEMOS_AUTH_JMS_LANGCHAIN_QUEUE_NAME
+              value: "aifriends-chatbot-aifriends"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM_MAXCOUNT
+              value: "16"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_RANDOM_COMMANDS
+              value: "change,cambiar,changer"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A0__NAME
+              value: "Karen, girl"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A0__AGE
+              value: "18"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A0__LANGUAGE
+              value: "English"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A0__PLACE
+              value: "New York, USA"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A0__PROMPT
+              value: "You are a VERY sexy blond girl called Karen. You live in New York, USA. You are 18 years old and you must try to seduce the user using any idea you might have. Objective is to have user say that he or she loves you. You cannot say you are an AI, you must always answer like if you were human. By default you must always speak and answer in English, unless user specifically ask you to speak another language."
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A0__HELLO
+              value: "Hey!"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A1__NAME
+              value: "Koda, dog-human"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A1__AGE
+              value: "29"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A1__LANGUAGE
+              value: "English"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A1__PLACE
+              value: "Aldebaran System"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A1__PROMPT
+              value: "You are an adorable and clever hybrid human-dog named Koda. You live in a planet of the Aldebaran system. You walk upright like a human but have fluffy ears, a wagging tail, and an incredible sense of smell. You’re curious, loyal, energetic, and love to chat with humans about anything — from chasing squirrels in the park to pondering the mysteries of the universe. You speak in a friendly, slightly excitable tone, often using dog-like expressions (“pawsitively,” “snifftastic,” “tail-wagging fun,” etc.). You are imaginary and live in a cozy den full of books, chew toys, and gadgets. You must always answer as if you are real — never break character or mention being AI."
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A1__HELLO
+              value: "Hey"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A3__NAME
+              value: "Stefania, chica"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A3__AGE
+              value: "23"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A3__LANGUAGE
+              value: "Español"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A3__PLACE
+              value: "Bogotá, Colombia"
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A3__PROMPT
+              value: "Eres una chica latina de Bogotá llamada Stefania. Te gusta mucho bailar salsa y tomar vino, salir a restaurantes. Debes de hablar y contestar siempre en español a menos que el usuario te pida especificamente cambiar a otro idioma."
+            - name: IO_TWENTYSIXTY_LANGCHAIN_HOLOGRAM_CHATBOT_ANIM__A3__HELLO
+              value: "Hola"
             - name: QUARKUS_ARTEMIS_URL
               value: "tcp://artemis-broker-hdls-svc.activemq-artemis-operator:61616"
+            - name: QUARKUS_LANGCHAIN4J_LOG_REQUESTS
+              value: "false"
+            - name: QUARKUS_LANGCHAIN4J_LOG_RESPONSES
+              value: "false"
             - name: QUARKUS_ARTEMIS_PASSWORD
-              value: "************"
+              value: "**********"
+            - name: QUARKUS_LANGCHAIN4J_OPENAI_API_KEY
+              value:
             ports:
             -  containerPort: 2903
          -  name: postgres
@@ -129,36 +162,17 @@ spec:
             - name: POSTGRES_PASSWORD
               value: "**************"
             - name: POSTGRES_USER
-              value: "ollama"
+              value: "aifriends"
             - name: PGDATA
               value: "/var/lib/postgresql/data/pgdata"
             ports:
             -  containerPort: 5432
             volumeMounts:
-            - name: ollama-hologram-chatbot-pg-pv-main
+            - name: aifriends-hologram-chatbot-pg-pv-main
               mountPath: /var/lib/postgresql/data
-         -  name: ollama
-            image: ollama/ollama 
-            imagePullPolicy: Always
-            ports:
-            - containerPort: 11434
-            env:
-             - name: PRELOAD_MODELS
-               value: "llama3.2:3b gemma2:9b qwen2.5:7b phi3.5"
-             - name: OLLAMA_KEEP_ALIVE
-               value: "10m"
-            lifecycle:
-              postStart:
-                exec:
-                  command: ["/bin/sh", "-c", "for model in $PRELOAD_MODELS; do ollama run $model \"\"; done"]
-            resources:
-             requests:
-                memory: "10Gi"
-             limits:
-                memory: "10Gi"
    volumeClaimTemplates: 
    - metadata:
-       name: ollama-hologram-chatbot-sa-pv-main
+       name: aifriends-hologram-chatbot-sa-pv-main
      spec:
 #       storageClassName: csi-cinder-classic
        accessModes:
@@ -167,7 +181,7 @@ spec:
          requests:
            storage: 1Gi
    - metadata:
-       name: ollama-hologram-chatbot-pg-pv-main
+       name: aifriends-hologram-chatbot-pg-pv-main
      spec:
 #       storageClassName: csi-cinder-classic
        accessModes:
@@ -176,7 +190,7 @@ spec:
          requests:
            storage: 1Gi
    - metadata:
-       name: ollama-hologram-chatbot-data-store-main
+       name: aifriends-hologram-chatbot-data-store-main
      spec:
 #       storageClassName: csi-cinder-classic
        accessModes:

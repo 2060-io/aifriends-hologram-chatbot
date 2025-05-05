@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ollama-hologram-chatbot-public
+  name: aifriends-hologram-chatbot-public
   namespace: demos-main
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -9,28 +9,28 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - ollama.demos.2060.io
-        - q.ollama.demos.2060.io
-      secretName: public.ollama.demos.2060.io-cert
+        - aifriends.demos.2060.io
+        - q.aifriends.demos.2060.io
+      secretName: public.aifriends.demos.2060.io-cert
   rules:
-    - host: ollama.demos.2060.io
+    - host: aifriends.demos.2060.io
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                 name: ollama-hologram-chatbot
+                 name: aifriends-hologram-chatbot
                  port:
                    number: 3001
-    - host: q.ollama.demos.2060.io
+    - host: q.aifriends.demos.2060.io
       http:
         paths:
           - path: /avatar.png
             pathType: Prefix
             backend:
               service:
-                 name: ollama-hologram-chatbot
+                 name: aifriends-hologram-chatbot
                  port:
                    number: 2903
 
