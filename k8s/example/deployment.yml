@@ -18,7 +18,7 @@ spec:
       spec:
          containers:
          -  name: aifriends-hologram-chatbot-sa-container
-            image: io2060/2060-service-agent:main
+            image: io2060/2060-service-agent:v1.3.1
             imagePullPolicy: Always
             env:
             - name: AGENT_ENDPOINT
