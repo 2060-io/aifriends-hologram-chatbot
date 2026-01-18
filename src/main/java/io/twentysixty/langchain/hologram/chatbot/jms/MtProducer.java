@@ -63,7 +63,7 @@ public class MtProducer extends AbstractProducer<BaseMessage> {
     	if(_debug) {
     		logger.info("sendMessage: " + JsonUtil.serialize(message, false));
     	}
-    	this.spool(message, 0);
+    	this.spool(message, 5);
     }
     
     
